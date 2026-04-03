@@ -8,7 +8,7 @@
 | Framework | Express 5 + TypeScript |
 | Database | MongoDB via Mongoose |
 | Auth | JWT (access + refresh token pattern) |
-| AI | Anthropic SDK (`@anthropic-ai/sdk`) |
+| AI | gemini SDK (`@gemini-ai/sdk`) |
 | Validation | Zod |
 | Config | `dotenv` + `envalid` |
 | Logging | `morgan` + `winston` |
@@ -24,7 +24,7 @@ budgetly-api/
 │   ├── config/
 │   │   ├── db.ts               # Mongoose connection
 │   │   ├── env.ts              # Validated env vars (envalid)
-│   │   └── anthropic.ts        # Anthropic client singleton
+│   │   └── gemini.ts        # gemini client singleton
 │   ├── models/
 │   │   ├── User.model.ts
 │   │   ├── Month.model.ts
@@ -79,7 +79,7 @@ JWT_REFRESH_SECRET=your_refresh_secret_here
 JWT_ACCESS_EXPIRES_IN=15m
 JWT_REFRESH_EXPIRES_IN=7d
 
-ANTHROPIC_API_KEY=your_anthropic_key_here
+gemini_API_KEY=your_gemini_key_here
 
 CLIENT_URL=http://localhost:8081
 ```
@@ -339,7 +339,7 @@ export const Month = mongoose.model<IMonth>('Month', MonthSchema);
 | POST | `/summarize/:monthKey` | Generate AI spending summary | ✓ |
 
 - Returns cached summary if generated within last 6 hours.
-- Otherwise calls Anthropic API and caches result on the `Month` document.
+- Otherwise calls gemini API and caches result on the `Month` document.
 
 **Response:**
 ```json
@@ -419,11 +419,11 @@ export const errorHandler = (
 ## AI Service (`ai.service.ts`)
 
 ```typescript
-import Anthropic from '@anthropic-ai/sdk';
+import gemini from '@gemini-ai/sdk';
 import { IEntry } from '../models/Entry.model';
 import { env } from '../config/env';
 
-const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
+const client = new gemini({ apiKey: env.gemini_API_KEY });
 
 export const generateMonthlySummary = async (
   entries: IEntry[],
@@ -633,7 +633,7 @@ export default app;
     "test":  "vitest"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.39.0",
+    "@gemini-ai/sdk": "^0.39.0",
     "bcryptjs":          "^2.4.3",
     "cors":              "^2.8.5",
     "dotenv":            "^16.4.5",
