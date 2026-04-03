@@ -33,5 +33,5 @@ const MonthSchema = new Schema<IMonth>(
 );
 
 MonthSchema.index({ userId: 1, monthKey: 1 }, { unique: true });
-
-export const Month = mongoose.model<IMonth>('Month', MonthSchema);
+const Month = mongoose.model<IMonth>('Month', MonthSchema);
+export default Month

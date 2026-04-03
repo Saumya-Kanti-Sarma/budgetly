@@ -1,17 +1,17 @@
-import { User } from '../models/User.model.js';
-import { hashPassword, comparePassword } from '../utils/password.js';
-import { signAccessToken, signRefreshToken, verifyRefreshToken } from '../utils/jwt.js';
+import User from '../models/User.model.js';
+import passwordUtil from '../utils/password.js';
+import jwtUtil from '../utils/jwt.js';
 
 export const registerUser = async (name: string, email: string, password: string) => {
   const existing = await User.findOne({ email });
   if (existing) throw Object.assign(new Error('Email already in use'), { statusCode: 409 });
 
-  const hashed = await hashPassword(password);
+  const hashed = await passwordUtil.hashPassword(password);
   const user = await User.create({ name, email, password: hashed });
 
   const payload = { userId: user._id.toString(), email: user.email };
-  const accessToken = signAccessToken(payload);
-  const refreshToken = signRefreshToken(payload);
+  const accessToken = jwtUtil.signAccessToken(payload);
+  const refreshToken = jwtUtil.signRefreshToken(payload);
 
   user.refreshToken = refreshToken;
   await user.save();
@@ -27,12 +27,12 @@ export const loginUser = async (email: string, password: string) => {
   const user = await User.findOne({ email }).select('+password +refreshToken');
   if (!user) throw Object.assign(new Error('Invalid credentials'), { statusCode: 401 });
 
-  const valid = await comparePassword(password, user.password);
+  const valid = await passwordUtil.comparePassword(password, user.password);
   if (!valid) throw Object.assign(new Error('Invalid credentials'), { statusCode: 401 });
 
   const payload = { userId: user._id.toString(), email: user.email };
-  const accessToken = signAccessToken(payload);
-  const refreshToken = signRefreshToken(payload);
+  const accessToken = jwtUtil.signAccessToken(payload);
+  const refreshToken = jwtUtil.signRefreshToken(payload);
 
   user.refreshToken = refreshToken;
   await user.save();
@@ -47,7 +47,7 @@ export const loginUser = async (email: string, password: string) => {
 export const refreshTokens = async (token: string) => {
   let payload;
   try {
-    payload = verifyRefreshToken(token);
+    payload = jwtUtil.verifyRefreshToken(token);
   } catch {
     throw Object.assign(new Error('Invalid refresh token'), { statusCode: 401 });
   }
@@ -58,8 +58,8 @@ export const refreshTokens = async (token: string) => {
   }
 
   const newPayload = { userId: user._id.toString(), email: user.email };
-  const accessToken = signAccessToken(newPayload);
-  const refreshToken = signRefreshToken(newPayload);
+  const accessToken = jwtUtil.signAccessToken(newPayload);
+  const refreshToken = jwtUtil.signRefreshToken(newPayload);
 
   user.refreshToken = refreshToken;
   await user.save();

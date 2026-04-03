@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { Month } from '../models/Month.model.js';
-import { Entry } from '../models/Entry.model.js';
-import { User } from '../models/User.model.js';
+import Month from '../models/Month.model.js';
+import Entry from '../models/Entry.model.js';
+import User from '../models/User.model.js';
 import { generateMonthlySummary } from '../services/ai.service.js';
 import * as R from '../utils/apiResponse.js';
 

@@ -1,5 +1,5 @@
-import { Entry } from '../models/Entry.model.js';
-import { Month } from '../models/Month.model.js';
+import Entry from '../models/Entry.model.js';
+import Month from '../models/Month.model.js';
 import { CreateEntryInput, UpdateEntryInput } from '../schemas/entry.schema.js';
 
 export const recomputeMonth = async (userId: string, monthKey: string): Promise<void> => {

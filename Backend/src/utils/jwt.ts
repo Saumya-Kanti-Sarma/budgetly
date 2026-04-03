@@ -17,3 +17,13 @@ export const verifyAccessToken = (token: string): TokenPayload =>
 
 export const verifyRefreshToken = (token: string): TokenPayload =>
   jwt.verify(token, env.JWT_REFRESH_SECRET) as TokenPayload;
+
+
+const jwtUtil = {
+  signAccessToken,
+  signRefreshToken,
+  verifyAccessToken,
+  verifyRefreshToken
+}
+
+export default jwtUtil

@@ -39,5 +39,6 @@ const EntrySchema = new Schema<IEntry>(
 );
 
 EntrySchema.index({ userId: 1, monthKey: 1, day: 1 });
+const Entry = mongoose.model<IEntry>('Entry', EntrySchema);
 
-export const Entry = mongoose.model<IEntry>('Entry', EntrySchema);
+export default Entry

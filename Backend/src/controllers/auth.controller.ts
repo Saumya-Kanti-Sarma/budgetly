@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import * as authService from '../services/auth.service.js';
-import { User } from '../models/User.model.js';
+import User from '../models/User.model.js';
 import * as R from '../utils/apiResponse.js';
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {

@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { Month } from '../models/Month.model.js';
+import Month from '../models/Month.model.js';
 import * as R from '../utils/apiResponse.js';
 
 export const getMonths = async (req: Request, res: Response, next: NextFunction) => {
