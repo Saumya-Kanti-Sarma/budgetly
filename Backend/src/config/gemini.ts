@@ -1,0 +1,10 @@
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import { env } from './env.js';
+
+const genAI = new GoogleGenerativeAI(env.GEMINI_API_KEY);
+
+export const geminiModel = genAI.getGenerativeModel({
+  model: 'gemini-1.5-flash',
+  systemInstruction:
+    'You are a friendly personal finance assistant named Budgetly. Be warm, concise, and encouraging. Never use markdown formatting.',
+});
